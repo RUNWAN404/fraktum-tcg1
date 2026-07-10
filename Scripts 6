@@ -1,0 +1,54 @@
+import React, { useState } from 'react';
+import { PackOpeningModal } from '../PackOpening/PackOpeningModal';
+import { Card } from '../PackOpening/types';
+
+// Фейковая генерация пака для теста. 
+// Сэр, в реальной игре эти данные будут приходить с бэкенда/смарт-контракта.
+const generateMockPack = (): Card[] => {
+  return [
+    { id: 'FRK-001', name: 'Obsidian Shard', rarity: 'Common' },
+    { id: 'FRK-042', name: 'Neon Protocol', rarity: 'Rare' },
+    { id: 'FRK-105', name: 'Cybernetic Core', rarity: 'Epic' },
+    { id: 'FRK-250', name: 'Void Walker', rarity: 'Legendary' },
+    // Раскомментируйте нужную карту для теста эффектов:
+    // { id: 'FRK-999', name: 'God AI', rarity: 'Divine' },
+    // { id: 'FRK-777', name: 'Glitch Anomaly', rarity: 'Exotic' },
+  ];
+};
+
+export const Market: React.FC = () => {
+  const [isOpeningPack, setIsOpeningPack] = useState(false);
+  const [packCards, setPackCards] = useState<Card[]>([]);
+
+  const handleBuyPack = () => {
+    // Списание баланса, запрос на сервер и т.д.
+    const newCards = generateMockPack();
+    setPackCards(newCards);
+    setIsOpeningPack(true);
+  };
+
+  return (
+    <div style={{ padding: '50px', color: '#fff', background: '#050508', minHeight: '100vh' }}>
+      <h1>MARKETPLACE</h1>
+      <p>Purchase standard FRAKTUM Booster Packs.</p>
+      
+      <div style={{ padding: '20px', border: '1px solid #333', display: 'inline-block', borderRadius: '8px', background: '#0d0f12' }}>
+        <h3 style={{ color: '#ff8c00', marginTop: 0 }}>CORE SET V1</h3>
+        <p style={{ color: '#aaa' }}>Contains 4-5 cards. Guaranteed 1 Rare or better.</p>
+        <button 
+          onClick={handleBuyPack}
+          style={{ background: '#ff8c00', color: '#000', border: 'none', padding: '10px 20px', fontWeight: 'bold', cursor: 'pointer', borderRadius: '4px' }}
+        >
+          BUY PACK (100 CR)
+        </button>
+      </div>
+
+      {isOpeningPack && (
+        <PackOpeningModal 
+          cards={packCards} 
+          onClose={() => setIsOpeningPack(false)} 
+        />
+      )}
+    </div>
+  );
+};
